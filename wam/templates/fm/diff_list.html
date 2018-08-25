@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}{{ vendor.name }} Diffs List{% endblock %}
+{% block wam-container %}
+<div class="class-body">
+  <table class="ui blue celled table" style="margin-bottom: 30px;">
+    <thead>
+      <tr>
+        <th width="15%">Datetime</th>
+        <th>RuleName</th>
+        <th>Source</th>
+        <th>Update</th>
+        <th>Operation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for package in packages %}
+      <tr>
+        <td>{{ package.add_time }}</td>
+        <td>{{ package.rule.name }}</td>
+        <td>{{ package.rule.name }}</td>
+        <td>{{ package.shooter_desc | default:"(N/Y)" | truncatechars:45 }}</td>
+        <td>
+          <button class="ui teal button mini" style="padding: 7px;" onclick="$('#package_edit_{{ package.id }}').modal('show')">Edit info</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}{{ fdiff.s_file.filename }} / {{ fdiff.d_file.filename }} detail{% endblock %}
+{% block wam-container %}
+{% include 'fm/fm_menu.html' %}
+<style>
+  .div      { border: solid 1px rgb(221, 221, 221); padding: 0px; margin-bottom: -30px;}
+  .minus3   { color: red;                          }
+  .plus3    { color: green;                        }
+  .at2      { color: blue;                         }
+  .plus     { color: black;   background: #79FF79; }
+  .minus    { color: black;   background: #FF9797; }
+  .ui.modal>.content>.icon+.description, .ui.modal>.content>.image+.description {
+    padding-left: 4em;
+  }
+
+  .ui.accordion .title:not(.ui) {
+    padding: 0;
+    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    font-size: 1em;
+    color: rgba(0,0,0,.87);
+    position: relative;
+    background: whitesmoke;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 10px 15px;
+    color: #555;
+    z-index: 10;
+    margin-top: -38px;
+    margin-bottom: -39px;
+  }
+
+  div.content.active {
+    margin-bottom: -30px;
+  }
+</style>
+<script>
+  $(function(){
+    $("div[name='diff_manage']").attr("id", "menu-item-hover");
+    $('.ui.accordion').accordion();
+    $('#send-mail').click(function(){
+      $('.small.modal').modal('show');
+    })
+  })
+</script>
+<div class="class-body">
+
+  <div class="ui cards">
+    <div class="card" style="width:72%;height:100px;">
+      <div class="content">
+        <div class="header">{{ fdiff.s_file.filename | add:"("| add:fdiff.s_file.timestamp | add:") / " | add:fdiff.d_file.filename | add:"(" | add:fdiff.d_file.timestamp | add:")" | truncatechars:85 }}</div>
+        <div class="description" style="font-size: 14px;">
+          <ul>
+            <li>Timeline: {{ fdiff.s_file.add_time | date:"Y-m-d H:i:s" }} - {{ fdiff.d_file.add_time | date:"Y-m-d H:i:s"}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="height:100px;">
+      <div class="content">
+        <div class="header">Email notification</div>
+        <div class="description">Send results to subscribers. (Diff result)</div>
+      </div>
+        <div class="ui bottom black attached button" id="send-mail"><i class="Mail Outline icon"></i> Send Mail</div>
+    </div>
+  </div>
+
+{% if not fdiff.render_content %}
+  <br><br>
+  <center><h3>未发现监控的特定文件出现变动，故不给予 DIFF 显示。</h3></center>
+{%endif%}
+<pre class="ui accordion">
+
+{{ fdiff.render_content | safe }}
+</pre>
+</div>
+
+<div class="ui small modal">
+  <div class="header">
+    Send Mail
+  </div>
+  <div class="image content">
+    <div class="ui medium image">
+      <img src="/static/images/20141007092745108.jpg">
+    </div>
+    <div class="description" style="margin-top: 11%;">
+      <div class="ui header" style="margin-left: -15px;">Enter an email address to be delivered.</div>
+      <div class="ui form">
+        <div class="field">
+          <label></label>
+          <input type="text" placeholder="evi1m0.bat@gmail.com">
+        </div>
+      </div>
+      <br>
+      <p>Is it okay to use this email?</p>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="ui black deny button">
+      Nope
+    </div>
+    <div class="ui positive right labeled icon button">
+      Yep, Ok
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div>
+{% endblock %}

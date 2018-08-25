@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Settings{% endblock %}
+{% block wam-container %}
+{% include 'settings_menu.html' %}
+<div class="class-body">
+  <form class="ui form" method="post" action="">
+    {% csrf_token %}
+    <div class="field">
+      <label>Monitore Check Interval (Seconds)</label>
+      <div class="two fields">
+        <div class="field">
+          <input type="text" name="MONITOR_CHECK_INTERVAL" placeholder="E.g: 3600" value="{{ configs.mci }}">
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Package Max (Bytes)</label>
+      <div class="two fields">
+        <div class="field">
+          <input type="text" name="DOWNLOAD_MAX_BYTE" placeholder="104857600" value="{{ configs.dmb }}">
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Diff Filter Ext</label>
+      <div class="two fields">
+        <div class="field">
+          <input type="text" name="DIFF_FILTER_EXT" placeholder="php,jsp,as" value="{{ configs.dfe }}"
+        </div>
+      </div>
+    </div>
+    <!--
+    <div class="two fields">
+      <div class="field">
+        <label>Diff filter ext</label>
+        <div class="ui fluid multiple search selection dropdown">
+          <input type="hidden" name="DIFF_FILTER_EXT" value="{{ configs.dfe }}">
+          <i class="dropdown icon"></i>
+          <div class="default text">Saved Contacts</div>
+          <div class="menu">
+            <div class="item" data-value="jenny" data-text="Jenny">
+              Jenny Hess
+            </div>
+            <div class="item" data-value="elliot" data-text="Elliot">
+              Elliot Fu
+            </div>
+            <div class="item" data-value="stevie" data-text="Stevie">
+              Stevie Feliciano
+            </div>
+            <div class="item" data-value="christian" data-text="Christian">
+              Christian
+            </div>
+            <div class="item" data-value="matt" data-text="Matt">
+              Matt
+            </div>
+            <div class="item" data-value="justen" data-text="Justen">
+              Justen Kitsune
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    -->
+    <button class="ui button blue" type="submit">Update</button>
+  </form>
+</div>
+{% endblock %}

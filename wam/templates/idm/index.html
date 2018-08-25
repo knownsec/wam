@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block title %}IDM Monitoring{% endblock %}
+{% block wam-container %}
+{% include 'idm/idm_menu.html' %}
+<style>
+  .ui.grid > .row > [class*="six wide"].column,
+  .ui.grid > .column.row > [class*="six wide"].column,
+  .ui.grid > [class*="six wide"].column,
+  .ui.column.grid > [class*="six wide"].column {
+    width: 21% !important;
+  }
+
+  .ui.grid > .row > [class*="ten wide"].column,
+  .ui.grid > .column.row > [class*="ten wide"].column,
+  .ui.grid > [class*="ten wide"].column,
+  .ui.column.grid > [class*="ten wide"].column {
+    width: 75.5% !important;
+  }
+
+  .ui.comments {
+    max-width: 1850px;
+    margin-left: -10px;
+  }
+</style>
+<div class="class-body">
+  <div class="ui grid">
+  <div class="two column computer only row">
+    <div class="ten wide column left-content">
+
+      <div class="ui comments">
+        <div class="comment">
+          <a class="avatar">
+            <img src="http://semantic-ui.com/images/avatar/small/matt.jpg">
+          </a>
+          <div class="content">
+            <a class="author">SRC:CLR</a>
+            <div class="metadata">
+              <span class="date">今天下午 5:42</span>
+            </div>
+            <div class="text">Spring Social Core Vulnerability Disclosure (CVE-2015-5258) - https://blog.srcclr.com/spring-social-core-vulnerability-disclosure/ …</div>
+          </div>
+        </div>
+        <div class="comment">
+          <a class="avatar">
+            <img src="http://semantic-ui.com/images/avatar/small/elliot.jpg">
+          </a>
+          <div class="content">
+            <a class="author">Elliot Fu</a>
+            <div class="metadata">
+              <span class="date">昨天上午12:30</span>
+            </div>
+            <div class="text">
+              <p>This has been very useful for my research. Thanks as well!</p>
+            </div>
+          </div>
+        </div>
+        <div class="comment">
+          <a class="avatar">
+            <img src="http://semantic-ui.com/images/avatar/small/joe.jpg">
+          </a>
+          <div class="content">
+            <a class="author">Joe Henderson</a>
+            <div class="metadata">
+              <span class="date">5 天以前</span>
+            </div>
+            <div class="text">Remote Code Execution as System User on Android 5 Samsung Devices abusing WifiCredService (Hotspot 2.0) http://blog.quarkslab.com/remote-code-execution-as-system-user-on-android-5-samsung-devices-abusing-wificredservice-hotspot-20.html …</div>
+          </div>
+        </div>
+        <div class="comment">
+          <div class="ui centered inline" id="load-more">
+            <div class="ui centered inline loader" id="load-more-core"></div>
+            <center>Load more...</center>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="six wide column right-content">
+      <div class="">
+        <h4 style="color:#66757f; margin-bottom: 20px;"><i class="icon arrow Up"></i> Top 10 · Today</h4>
+      </div>
+      <div class="">
+        <ul class="trend-items js-trends">
+          <li class="trend-item js-trend-item  " data-trend-name="#HTGAWM">
+            <a class="js-nav trend-name" dir="ltr" href="/hashtag/HTGAWM?src=tren" data-query-source="trend_click">#HTGAWM</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#Scandal">
+            <a class="js-nav trend-name" dir="ltr" href="/hashtag/Scandal?src=tren" data-query-source="trend_click">#Scandal</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#CVE-2015-2222">
+            <a class="js-nav trend-name" dir="ltr" href="/search?q=%22iPad%20Pro%22&amp;src=tren" data-query-source="trend_click">#iPad Pro</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#purpose">
+            <a class="js-nav trend-name" dir="ltr" href="/hashtag/purpose?src=tren" data-query-source="trend_click">#purpose</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#MadeInTheAM">
+            <a class="js-nav trend-name" dir="ltr" href="/hashtag/MadeInTheAM?src=tren" data-query-source="trend_click">#MadeInTheAM</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#TheTechAwards">
+            <a class="js-nav trend-name" dir="ltr" href="/hashtag/TheTechAwards?src=tren" data-query-source="trend_click">#TheTechAwards</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#Steph Curry">
+            <a class="js-nav trend-name" dir="ltr" href="/search?q=%22Steph%20Curry%22&amp;src=tren" data-query-source="trend_click">#Steph Curry</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#iPad Pro">
+            <a class="js-nav trend-name" dir="ltr" href="/search?q=%22iPad%20Pro%22&amp;src=tren" data-query-source="trend_click">#CVE-2015-2221</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#North Korea">
+            <a class="js-nav trend-name" dir="ltr" href="/search?q=%22North%20Korea%22&amp;src=tren" data-query-source="trend_click">#North Korea</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  </div>
+</div>
+
+<script>
+  $('#load-more').click(function(){
+    $('#load-more-core').addClass('active');
+  })
+</script>
+{% endblock %}

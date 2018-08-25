@@ -1,0 +1,240 @@
+/*
+ * wam version 1.0 css
+ * author: $pdb
+ */
+
+.wam-avatar{
+    color: #fff;
+    width: 55px;
+    height: 55px;
+    font-size: 28px;
+    line-height: 55px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    background-color: #4387fd;
+    border: 1px solid rgba(34, 36, 38, 0.15);
+    box-shadow: 0px 1px 2px 0 rgba(34, 36, 38, 0.15);
+}
+
+.wam-container {
+  margin-top: 80px;
+  display: -webkit-box;
+  -webkit-box-align: inherit;
+  -webkit-align-items: inherit;
+  -ms-flex-align: inherit;
+  align-items: inherit;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: inherit;
+  -ms-flex-direction: inherit;
+  flex-direction: inherit;
+  width: 1127px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.class-menu {
+  margin-left: -15px;
+  margin-bottom: -15px;
+  line-height: 15px;
+  height: 20px;
+  padding: 0;
+}
+
+.class-menu > .menu-item {
+  display: inline-block;
+  color: #eee;
+  font-weight: bold;
+  height: 35px;
+  margin: 0px 8px 0;
+  padding: 0 8px;
+  font-weight: normal;
+}
+
+.class-menu > .menu-item:hover {
+  border-bottom: 3px solid #4387fd;
+}
+
+.class-menu > #menu-item-hover {
+  font-weight: bold;
+  border-bottom: 3px solid #4387fd;
+}
+
+.class-body {
+  width: 1127px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: 20px;
+}
+
+/* tag edit */
+.content {
+  font-size: 15px;
+}
+
+.ui.feed>.event>.label+.content {
+  margin-top: 18px;
+}
+
+.ui.mini.label {
+  font-size: .55285714rem;
+  border-radius: 0.3rem;
+  position: relative;
+  margin-right: 5px;
+  top: -3px;
+}
+
+.ui.feed>.event>.label {
+  width: 3.5em;
+  padding: 5px;
+}
+/* tag end */
+
+.ui.feed > .event > .label img {
+  margin: 5px;
+}
+
+.ui.feed > .event {
+  margin-bottom: 5px;
+  border-bottom: 1px rgba(247, 243, 243, 0.72) solid;
+}
+
+.dimmable {
+  position: static;
+}
+
+.ui.dimmer {
+  background-color: rgba(10, 10, 10, 0.67);
+}
+
+.diff-item-id {
+  float: right;
+}
+
+.ui.modal {
+  width: 500px;
+  margin: 0 0 0 -250px;
+  background-color: rgba(0, 0, 0, 0.34);
+}
+
+.ui.card>.button, .ui.card>.buttons, .ui.cards>.card>.button, .ui.cards>.card>.buttons {
+ margin: 0 0px;
+ width: calc(100%);
+}
+
+.ui.tiny.label, .ui.tiny.labels .label {
+ font-size: .61428571rem;
+ margin: 3px;
+ padding-bottom: 5px;
+ margin-top: 5px;
+}
+
+span.plus.warningLine {
+    background: rgb(241, 61, 0);
+    color: #fff;
+    border-top: 1px rgba(0, 0, 0, 0.15) solid;
+    position: absolute;
+    width: 75%;
+}
+
+/* return top */
+
+.zh-backtotop {
+    position: fixed;
+    bottom: 113px;
+    left: 75%;
+    z-index: 19;
+    margin-left: 230px;
+}
+
+.zh-backtotop .btn-action {
+    display: block;
+    width: 38px;
+    height: 38px;
+    background-color: #ddd;
+    border-radius: 3px;
+    border: 0;
+    cursor: pointer;
+    position: relative;
+}
+
+.zh-backtotop .arrow {
+    width: 0;
+    height: 0;
+    top: -1px;
+    border: 9px solid transparent;
+    border-bottom-color: #aaa;
+}
+
+.zh-backtotop .stick {
+    width: 8px;
+    height: 14px;
+    top: 15px;
+    border-radius: 1px;
+    background-color: #aaa;
+}
+
+.zh-backtotop div {
+    position: absolute;
+    right: 0;
+    left: 0;
+    margin: auto;
+}
+
+/* idm css */
+
+.left-content {
+  border: 1px #fff solid;
+  padding: 10px;
+  margin-left: 10px;
+}
+
+.right-content {
+  border: 1px #fff solid;
+  padding: 10px;
+  margin-left: 10px;
+}
+
+.ui.comments .comment .avatar img, .ui.comments .comment img.avatar {
+  width: 48px;
+  height: auto;
+}
+
+.ui.comments .comment>.avatar~.content {
+  margin-left: 4.5em;
+}
+
+.ui.comments .comment {
+  background: #fff;
+  border-top: #e1e8ed solid 1px;
+  border-left: 1px solid #e1e8ed;
+  border-right: 1px solid #e1e8ed;
+  border-bottom: 1px solid #e1e8ed;
+  background-clip: padding-box;
+  cursor: pointer;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  margin-bottom: -10px;
+}
+
+.ui.comments .comment:hover {
+  background-color: #fbfbfb;
+}
+
+.ui.comments .comment:first-child {
+  padding-top: 10px;
+  margin-top: -10px;
+}
+
+.right-content {
+  padding: 10px;
+  max-height: 350px;
+  border: 1px #e1e8ed solid;
+}
+
+.ui.items>.item>.image>img {
+  max-height: 150px;
+  height: 100%;
+}

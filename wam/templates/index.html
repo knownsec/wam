@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Index{% endblock %}
+{% block wam-container %}
+<style>
+  .ui.card, .ui.cards>.card {
+    width: 160px;
+  }
+  .ui.link.cards {
+    margin-left: 3px;
+  }
+</style>
+<link href="/static/css/shake.css" rel="stylesheet" media="all">
+<div class="ui main text container">
+    <h1 class="ui">Welcome to wam plant !</h1>
+    <p>WAM is a platform powered by Python to monitor "Web App", "The dynamic network information". To a certain extent, it greatly help the security researchers save time on tracking the vulnerable code updates and industry dynamics of investment.</p>
+    <div class="ui section divider"></div>
+    <div class="ui link cards">
+      <div class="card shake shake-little" onclick="location.href='/am/';">
+        <div class="image">
+          <img src="/static/images/SourceTreeNewIcon-300x300.png">
+        </div>
+        <div class="content">
+          <div class="header">App Monitoring</div>
+          <div class="description">This module can monitor every updates on all of apps on internet, analysising the changes to make Tag and provide mail notification.</div>
+        </div>
+      </div>
+      <div class="card shake shake-little" onclick="location.href='/fm/';">
+        <div class="image">
+          <img src="/static/images/Activity-Monitor-icon.png">
+        </div>
+        <div class="content">
+          <div class="header">File Monitoring</div>
+          <div class="description">This module can monitor every updates on all of files on internet, analysising the changes to make Tag and provide mail notification.</div>
+        </div>
+      </div>
+      <div class="card shake shake-little" onclick="location.href='/idm/';">
+        <div class="image">
+          <img src="/static/images/Messages-icon.png">
+        </div>
+        <div class="content">
+          <div class="header">IDM Model</div>
+          <div class="description">This module uses Web crawler to fetch the industry dynamic information and report that to users.</div>
+        </div>
+      </div>
+      <div class="card shake shake-little" onclick="location.href='/vdr/';">
+        <div class="image">
+          <img src="/static/images/Time-Machine-icon.png">
+        </div>
+        <div class="content">
+          <div class="header">VDR Model</div>
+          <div class="description">This module manager all of application package in the history, and save the updated version of which DIFF details.</div>
+        </div>
+      </div>
+    </div>
+    <div class="ui section divider"></div>
+</div>
+{% endblock %}

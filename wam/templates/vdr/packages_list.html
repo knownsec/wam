@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}{{ vendor.name }} Package List{% endblock %}
+{% block wam-container %}
+<div class="class-body">
+  <table class="ui blue celled table" style="margin-bottom: 30px;">
+    <thead>
+      <tr>
+        <th width="15%">Datetime</th>
+        <th>Package</th>
+        <th>RuleName</th>
+        <th width="8%">Shooter</th>
+        <th width="35%">Remarks</th>
+        <th>Operation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for package in packages %}
+      <tr>
+        <td>{{ package.add_time }}</td>
+        <td><a href="/am/package/download/{{ package.id }}" class="software" data-content="Size: {{ package.size | filesizeformat}}">{{ package.filename }}</a></td>
+        <td>{{ package.rule.name }}</td>
+        <td>{% if package.shooter_id == 0 %}<i class="Remove Circle icon red">{% else %}<i class="check circle icon green">{% endif %}</i> <a href="{{ package.shooter_link | default:"#" }}">{{ package.shooter_id | default:"(N/Y)" }}</a></td>
+        <td>{{ package.shooter_desc | default:"(N/Y)" | truncatechars:45 }}</td>
+        <td>
+          <button class="ui teal button mini" style="padding: 7px;" onclick="$('#package_edit_{{ package.id }}').modal('show')">Edit info</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% for package in packages %}
+  <div class="ui small modal" id="package_edit_{{ package.id }}" style="background-color: rgba(0, 0, 0, 0.34);">
+    <div class="image content">
+      <div class="description">
+        <div class="content">
+          <p>
+            <form class="ui form" method="post" action="/vdr/package/edit/{{ package.id }}">
+              {% csrf_token %}
+              <div class="field">
+                <label>ID</label>
+                <input type="text" name="id" placeholder="" value="{{ package.shooter_id | default:"" }}">
+              </div>
+              <div class="field">
+                <label>Link</label>
+                <input type="text" name="link" placeholder="" value="{{ package.shooter_link | default:"" }}">
+              </div>
+              <div class="field">
+                <label>Description</label>
+                <textarea name="description" placeholder="" style="height: 100px">{{ package.shooter_desc | default:"" }}</textarea>
+              </div>
+              <button class="ui button blue" type="submit">Update</button>
+            </form>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<script>
+  $('.software')
+    .popup()
+    ;
+</script>
+{% endblock %}

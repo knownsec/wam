@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% block title %}Vendor Detail{% endblock %}
+{% block wam-js %}
+  <script type="text/javascript" src="/static/js/highcharts.js"></script>
+  <script type="text/javascript" src="/static/js/modules/exporting.js"></script>
+  <script type="text/javascript" src="/static/js/themes/sand-signika.js"></script>
+{% endblock %}
+{% block wam-container %}
+{% include 'am/am_menu.html' %}
+<style>
+  .ui.compact.table td {
+    padding: .7em .7em;
+  }
+  .extra > .label {
+    border-radius: 5px;
+    font-size: 10px;
+  }
+</style>
+<script>
+  {% if diff_report %}
+  var series = [];
+  series.push({name: 'diff', data: {{ diff_report }}});
+  {% if tags_report %}
+  {% for tag_name, values in tags_report.iteritems %}
+  series.push({name: '{{ tag_name }}', data: {{ values }}});
+  {% endfor %}
+  {% endif %}
+  {% endif %}
+
+  $(function(){
+    $("div[name='vendor_manage']").attr("id", "menu-item-hover");
+    $('.ui.accordion')
+    .accordion();
+    $('#edit-vendor').click(function(){
+      $('#vendor_edit').modal('show');
+    })
+
+    // highcharts settings
+    $('#container-chars').highcharts({
+        title: {
+          text: 'Statistical Report',
+          x: -20 //center
+        },
+        subtitle: {
+          text: 'Powered by "Web Security Loop"',
+          x: -20
+        },
+        xAxis: {
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        yAxis: {
+          title: {
+            text: 'Times (n)'
+          },
+          plotLines: [{
+            value: 0,
+            width: 1,
+            color: '#808080'
+          }]
+        },
+        tooltip: {
+          valueSuffix: ''
+        },
+        legend: {
+          layout: 'vertical',
+          align: 'right',
+          verticalAlign: 'middle',
+          borderWidth: 0
+        },
+        series: series,
+    });
+  })
+</script>
+
+<div class="class-body">
+  <div class="ui divided items">
+    <div class="item">
+      <div class="image" style="width: 150px">
+        <img style="border-radius: 1rem;height: 150px;" src="{{ logo_url }}{{ vendor.logo.name | default:"logo.png" }}">
+      </div>
+      <div class="content" style="margin-top: 10px;">
+        <a class="header">{{ vendor.name }}</a><i class="rss icon square orange" style="font-size: 15;padding-left: 8px;margin-bottom: 3px;margin-top:-5px;"></i>
+        <button class="ui button mini green right floated" id="edit-vendor">Edit</button>
+        <div class="meta" style="margin-bottom: 10px;">
+          <span class="cinema">{{ vendor.site }}</span>
+        </div>
+        <div class="description" style="position: static;height: 50px;margin-bottom:10px;">
+          <p>
+            {{ vendor.desc | default:"(N/Y)" }}
+          </p>
+        </div>
+        <div class="extra">
+          <div class="ui label blue">Last update time: {{ end_tdiff_time }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui horizontal divider" style="margin-bottom: 19px;">Charts </div>
+
+  <div id="container-chars" style="min-width:700px;height:400px;border: 1px #CCC solid;"></div>
+
+
+  <div class="ui horizontal divider" style="margin-bottom: 19px;margin-top:20px;">ChangeLog</div>
+  <div class="vendor-diff-list" style="margin-bottom: 30px">
+    <table class="ui olive table celled" style="border-top: .2em solid #CCCCCC;">
+      <thead>
+        <tr>
+          <th width="62%">Message</th>
+          <th>Add_Time</th>
+          <th width="8%">Diff</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fdiff in f_diffs %}
+        <tr>
+          <td>检测到 <a href="#">{% if fdiff.s_file.frule.desc %}{{ fdiff.s_file.frule.desc }}{% else %}{{ fdiff.s_file.frule.name }}{% endif %}</a> 有内容变更。</td>
+          <td>{{ fdiff.s_file.frule.add_time }}</td>
+          <td>
+            <a class="ui button blue label" href="/fm/diff/detail/{{ fdiff.id }}">Detail</a>
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  </div>
+
+
+
+  <div class="ui horizontal divider" style="margin-bottom: 19px;margin-top:20px;">Results</div>
+  <div class="vendor-diff-list" style="margin-bottom: 30px">
+    <table class="ui olive table celled" style="border-top: .2em solid #CCCCCC;">
+      <thead>
+        <tr>
+          <th width="12%">RuleName</th>
+          <th width="20%">Src</th>
+          <th width="20%">Dest</th>
+          <th width="10%">Datetime</th>
+          <th>Tags</th>
+          <th width="8%">Diff</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t_diff in t_diffs %}
+        <tr>
+          <td><a href="">{{ t_diff.diff.s_package.rule.name }}</a></td>
+          <td><a href="/am/package/download/{{ t_diff.diff.s_package.id }}">{{ t_diff.diff.s_package.filename }} ({{ t_diff.diff.s_package.timestamp }})</a></td>
+          <td><a href="/am/package/download/{{ t_diff.diff.d_package.id }}">{{ t_diff.diff.d_package.filename }} ({{ t_diff.diff.d_package.timestamp }})</a></td>
+          <td>{{ t_diff.diff.add_time | date:"Y-m-d H:i:s" }}</td>
+          <td>
+          {% if t_diff.analysis_result.has_report %}
+            {% for plugin, num in t_diff.analysis_result.plugins.items %}
+                {% if num != 0 %}
+                    <a class="ui {% if plugin == "sqli" %}red
+                    {% elif plugin == "xss" %}orange
+                    {% elif plugin == "backdoor" %}yellow
+                    {% else %}blue
+                    {% endif %}tag tiny label" style="margin-right: 5px">{{ plugin }}</a>
+                {% endif %}
+            {% endfor %}
+          {% endif %}
+          </td>
+          <td>
+            <a class="ui button blue label" href="/am/diff/detail/{{ t_diff.diff.id }}">Detail</a>
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="ui small modal" id="vendor_edit" style="background-color: rgba(0, 0, 0, 0.34);">
+  <div class="image content">
+    <div class="description">
+      <div class="content">
+        <form class="ui form" method="post" action="/am/rules/vendor/edit/{{ vendor.id }}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="field">
+            <label>Vendor Name</label>
+            <input type="text" name="name" placeholder="" value="{{ vendor.name }}">
+          </div>
+          <div class="field">
+            <label>Website</label>
+            <input type="text" name="website" placeholder="" value="{{ vendor.site }}">
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <textarea name="description" placeholder="" style="height: 100px">{{ vendor.desc | default:"" }}</textarea>
+          </div>
+          <div class="field">
+            <label for="edit_file_{{ vendor.id }}" class="ui icon button">
+              <i class="file icon"></i>
+              Upload Photo</label>
+            <input type="file" id="edit_file_{{ vendor.id }}" name="logo" style="display:none">
+          </div>
+          <button class="ui button blue" type="submit">Update</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Diff Manage{% endblock %}
+{% block wam-container %}
+{% include 'am/am_menu.html' %}
+<div class="class-body">
+  <table class="ui red celled table">
+    <thead>
+      <tr>
+        <th width="12%">RuleName</th>
+        <th width="20%">Src</th>
+        <th width="20%">Dest</th>
+        <th width="10%">Datetime</th>
+        <th>Tags</th>
+        <th width="8%">Diff</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t_diff in t_diffs %}
+      <tr>
+        <td><a href="">{{ t_diff.diff.s_package.rule.name }}</a></td>
+        <td><a href="/am/package/download/{{ t_diff.diff.s_package.id }}">{{ t_diff.diff.s_package.filename }} ({{ t_diff.diff.s_package.timestamp }})</a></td>
+        <td><a href="/am/package/download/{{ t_diff.diff.d_package.id }}">{{ t_diff.diff.d_package.filename }} ({{ t_diff.diff.d_package.timestamp }})</a></td>
+        <td>{{ t_diff.diff.add_time | date:"Y-m-d H:i:s" }}</td>
+        <td>
+          {% if t_diff.analysis_result.has_report %}
+            {% for plugin, num in t_diff.analysis_result.plugins.items %}
+                {% if num != 0 %}
+                    <a class="ui {% if plugin == "sqli" %}red
+                    {% elif plugin == "xss" %}orange
+                    {% elif plugin == "backdoor" %}yellow
+                    {% else %}blue
+                    {% endif %}tag tiny label" style="margin-right: 5px">{{ plugin }}</a>
+                {% endif %}
+            {% endfor %}
+          {% endif %}
+        </td>
+        <td>
+          <a class="ui button blue label" href="/am/diff/detail/{{ t_diff.diff.id }}">Detail</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+
+    <tfoot>
+      <tr><th colspan="6">
+          <div class="ui right floated pagination menu">
+            {% if page_content %}
+              {% if page_content.page.has_previous %}
+                <a href="/am/diff/?page={{ page_content.page.previous_page_number }}" class="icon item">
+                  <i class="left chevron icon"></i>
+                </a>
+              {% endif %}
+
+              {% for pnum in page_content.begin %}
+                <a href="/am/diff/?page={{ pnum }}" class="item {% ifequal pnum page_content.current %}active{% endifequal %}">{{ pnum }}</a>
+              {% endfor %}
+
+              {% if page_content.middle %}
+                <a class="item">...</a>
+                {% for pnum in page_content.middle %}
+                  <a href="/am/diff/?page={{ pnum }}" class="item {% ifequal pnum page_content.current %}active{% endifequal %}">{{ pnum }}</a>
+                {% endfor %}
+              {% endif %}
+
+              {% if page_content.end %}
+                <a class="item">...</a>
+                {% for pnum in page_content.end %}
+                  <a href="/am/diff/?page={{ pnum }}" class="item {% ifequal pnum page_content.current %}active{% endifequal %}">{{ pnum }}</a>
+                {% endfor %}
+              {% endif %}
+
+              {% if page_content.page.has_next %}
+                <a href="/am/diff/?page={{ page_content.page.next_page_number }}" class="icon item">
+                  <i class="right chevron icon"></i>
+                </a>
+              {% endif %}
+            {% endif %}
+          </div>
+        </th>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+{% endblock %}

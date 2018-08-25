@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Diff Manage{% endblock %}
+{% block wam-container %}
+{% include 'fm/fm_menu.html' %}
+<div class="class-body">
+  <table class="ui red celled table">
+    <thead>
+      <tr>
+        <th width="12%">RuleName</th>
+        <th width="20%">Src</th>
+        <th width="20%">Dest</th>
+        <th width="10%">Datetime</th>
+        <th width="8%">Diff</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fdiff in fdiffs %}
+      <tr>
+        <td><a href="">{{ fdiff.s_file.frule.name }}</a></td>
+        <td><a href="/fm/file/download/{{ fdiff.s_file.id }}">{{ fdiff.s_file.filename }} ({{ fdiff.s_file.timestamp }})</a></td>
+        <td><a href="/fm/file/download/{{ fdiff.d_file.id }}">{{ fdiff.d_file.filename }} ({{ fdiff.d_file.timestamp }})</a></td>
+        <td>{{ fdiff.add_time | date:"Y-m-d H:i:s" }}</td>
+        <td>
+          <a class="ui button blue label" href="/fm/diff/detail/{{ fdiff.id }}">Detail</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+
+    <tfoot>
+      <tr><th colspan="6">
+          <div class="ui right floated pagination menu">
+            {% if page_content %}
+              {% if page_content.page.has_previous %}
+                <a href="/fm/diff/?page={{ page_content.page.previous_page_number }}" class="icon item">
+                  <i class="left chevron icon"></i>
+                </a>
+              {% endif %}
+
+              {% for pnum in page_content.begin %}
+                <a href="/fm/diff/?page={{ pnum }}" class="item {% ifequal pnum page_content.current %}active{% endifequal %}">{{ pnum }}</a>
+              {% endfor %}
+
+              {% if page_content.middle %}
+                <a class="item">...</a>
+                {% for pnum in page_content.middle %}
+                  <a href="/fm/diff/?page={{ pnum }}" class="item {% ifequal pnum page_content.current %}active{% endifequal %}">{{ pnum }}</a>
+                {% endfor %}
+              {% endif %}
+
+              {% if page_content.end %}
+                <a class="item">...</a>
+                {% for pnum in page_content.end %}
+                  <a href="/fm/diff/?page={{ pnum }}" class="item {% ifequal pnum page_content.current %}active{% endifequal %}">{{ pnum }}</a>
+                {% endfor %}
+              {% endif %}
+
+              {% if page_content.page.has_next %}
+                <a href="/fm/diff/?page={{ page_content.page.next_page_number }}" class="icon item">
+                  <i class="right chevron icon"></i>
+                </a>
+              {% endif %}
+            {% endif %}
+          </div>
+        </th>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+{% endblock %}

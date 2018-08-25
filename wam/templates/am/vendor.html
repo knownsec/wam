@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Vendor list{% endblock %}
+{% block wam-container %}
+{% include 'am/am_menu.html' %}
+<style>
+  .ui.compact.table td {
+    padding: .7em .7em;
+  }
+</style>
+
+<div class="class-body">
+  <table class="ui celled green table">
+    <thead>
+      <tr>
+        <th width="1%"><i id="search-func" class="Search icon" style="font-size:16px; margin-left: 8px;"></i></th>
+        <th width="35%">Vendor</th>
+        <th>WebSite</th>
+        <th>Rule Number</th>
+        <th>Diff All</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for vendor, rules_count, diffs_count in vendors_report %}
+      <tr>
+      <td><img src="{{ LOGO_PATH }}{{ vendor.logo.name | default:"logo.png" }}" class="ui mini rounded image"></td>
+      <td><a href="/am/vendor/{{ vendor.id}}">{{ vendor.name }}</a></td>
+      <td>{{ vendor.site }}</td>
+      <td>{{ rules_count }}</td>
+      <td>{{ diffs_count }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="ui small modal">
+  <div class="header">
+    Search (Rules: {{rules_count}}, Vendor: {{vendor_count}})
+  </div>
+  <div class="image content">
+    <div class="description">
+      <div class="ui search">
+        <div class="ui icon input">
+          <div class="field" style="width: 600px;">
+          <select class="ui fluid search dropdown">
+          {% for rule in all_rules %}
+          <option>{{ rule.name }}</option>
+          {% endfor %}
+          </select>
+          </div>
+        </div>
+        <div class="results"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function(){
+    $('#search-func').click(function(){
+      $('.ui.small.modal')
+      .modal('show')
+      ;
+    })
+  })
+
+</script>
+
+{% endblock %}

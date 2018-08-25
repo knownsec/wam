@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+{% block title %}Rules setting{% endblock %}
+{% block wam-container %}
+{% include 'am/am_menu.html' %}
+<style>
+  .ui.compact.table td {
+    padding: .7em .7em;
+  }
+</style>
+<div class="ui items floated right">
+<div class="ui category search">
+  <div class="ui icon input">
+    <input class="prompt" type="text" placeholder="Search apps...">
+    <i class="search icon"></i>
+  </div>
+  <div class="results"></div>
+</div>
+</div>
+<div class="class-body">
+  <table class="ui yellow compact celled table">
+    <thead class="full-width">
+      <tr>
+        <th width="7%">
+          <div class="ui buttons">
+            <button class="ui green button" id="add-rule">Add re</button>
+          </div>
+        </th>
+        <th width="15%">RuleName</th>
+        <th width="14%">Vendor</th>
+        <th width="22%">Source</th>
+        <th width="22%">Rule</th>
+        <th width="10%">Start/time</th>
+        <th width="10%">Last/time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rule in rules %}
+      <tr>
+        <td class="collapsing">
+          <a href="#" onclick="$('#rule_del_{{ rule.id }}').modal('show');" class="ui button red">Delete</a>
+        </td>
+        <td><a href="#" onclick="$('#rule_edit_{{ rule.id }}').modal('show');">{{ rule.name }}</a></td>
+        <td><a href="#" onclick="$('#vendor_edit_{{ rule.vendor.id }}').modal('show');">{{ rule.vendor.name }}</a></td>
+        <td>{{ rule.source_url | truncatechars:40 }}</td>
+        <td>{{ rule.regex | truncatechars:45 | default:"(N/Y)" }}</td>
+        <td>{{ rule.add_time | date:"Y-m-d H:i:s" }}</td>
+        <td>{{ rule.last_check_date | date:"Y-m-d H:i:s" | default:"(N/Y)" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="7">
+          <div class="ui right floated pagination menu">
+            {% if page_content %}
+              {% if page_content.page.has_previous %}
+                <a href="/am/rules/?page={{ page_content.page.previous_page_number }}" class="icon item">
+                  <i class="left chevron icon"></i>
+                </a>
+              {% endif %}
+
+              {% for pnum in page_content.begin %}
+                <a href="/am/rules/?page={{ pnum }}" class="item {% ifequal pnum page_content.current %}active{% endifequal %}">{{ pnum }}</a>
+              {% endfor %}
+
+              {% if page_content.middle %}
+                <a class="item">...</a>
+                {% for pnum in page_content.middle %}
+                  <a href="/am/rules/?page={{ pnum }}" class="item {% ifequal pnum page_content.current %}active{% endifequal %}">{{ pnum }}</a>
+                {% endfor %}
+              {% endif %}
+
+              {% if page_content.end %}
+                <a class="item">...</a>
+                {% for pnum in page_content.end %}
+                  <a href="/am/rules/?page={{ pnum }}" class="item {% ifequal pnum page_content.current %}active{% endifequal %}">{{ pnum }}</a>
+                {% endfor %}
+              {% endif %}
+
+              {% if page_content.page.has_next %}
+                <a href="/am/rules/?page={{ page_content.page.next_page_number }}" class="icon item">
+                  <i class="right chevron icon"></i>
+                </a>
+              {% endif %}
+            {% endif %}
+          </div>
+        </th>
+      </tr>
+    </tfoot>
+  </table>
+  {% for rule in rules %}
+  <div class="ui basic modal" id="rule_del_{{ rule.id }}" style="background-color: rgba(0, 0, 0, 0.34);">
+    <i class="close icon"></i>
+    <div class="header">
+      Delete Confirm
+    </div>
+    <div class="content">
+      <div class="description">
+        <h4>You want to delete rule: "{{ rule.name }}" ?</h4>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="two fluid ui inverted buttons">
+        <div class="ui red basic inverted button" onclick="$('.ui.basic.modal').modal('hide');">
+          <i class="remove icon"></i>
+          No
+        </div>
+        <div class="ui green basic inverted button" onclick="rule_del({{ rule.id }});">
+          <i class="checkmark icon"></i>
+          Yes
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% for rule in rules %}
+  <div class="ui small modal" id="rule_edit_{{ rule.id }}" style="background-color: rgba(0, 0, 0, 0.34);">
+    <div class="image content">
+      <div class="description">
+        <div class="content">
+          <p>
+            <form class="ui form" method="post" action="/am/rules/rule/edit/{{ rule.id }}">
+              {% csrf_token %}
+              <div class="field">
+                <label>Vendor</label>
+                <select class="ui fluid search dropdown" style="height: 35px;" name="vendor_id">
+                  {% for vendor in vendors %}
+                  <option value="{{ vendor.id }}" {% ifequal rule.vendor.name vendor.name %}selected{% endifequal %}>{{ vendor.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="field">
+                <label>Rule Name</label>
+                <input type="text" name="name" placeholder="" value="{{ rule.name }}">
+              </div>
+              <div class="field">
+                <label>Source Url</label>
+                <input type="text" name="source_url" placeholder="" value="{{ rule.source_url }}">
+              </div>
+              <div class="field">
+                <label>Regular Expression</label>
+                <input type="text" name="regex" placeholder="" value="{{ rule.regex }}">
+              </div>
+              <button class="ui button blue" type="submit">Update</button>
+              <a class="ui button teal" onclick="check_download_url(this.parentNode);">Test Rule</a>
+            </form>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% for vendor in vendors %}
+  <div class="ui small modal" id="vendor_edit_{{ vendor.id }}" style="background-color: rgba(0, 0, 0, 0.34);">
+    <div class="image content">
+      <div class="description">
+        <div class="content">
+          <form class="ui form" method="post" action="/am/rules/vendor/edit/{{ vendor.id }}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="field">
+              <label>Vendor Name</label>
+              <input type="text" name="name" placeholder="" value="{{ vendor.name }}">
+            </div>
+            <div class="field">
+              <label>Website</label>
+              <input type="text" name="website" placeholder="" value="{{ vendor.site }}">
+            </div>
+            <div class="field">
+              <label>Description</label>
+              <textarea name="description" placeholder="" style="height: 100px">{{ vendor.desc | default:"" }}</textarea>
+            </div>
+            <div class="field">
+              <label for="edit_file_{{ vendor.id }}" class="ui icon button">
+                <i class="file icon"></i>
+                Upload Photo</label>
+              <input type="file" id="edit_file_{{ vendor.id }}" name="logo" style="display:none">
+            </div>
+            <button class="ui button blue" type="submit">Update</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+
+<div class="ui small modal" id="add">
+  <div class="image content">
+    <div class="description">
+      <div class="ui accordion">
+        <div class="title"><i class="dropdown icon"></i> Add a vendor? </div>
+        <div class="active content">
+          <p class="transition hidden">
+            <form class="ui form" method="post" action="/am/rules/vendor/add" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="field">
+                <label>Vendor Name</label>
+                <input type="text" name="name" placeholder="">
+              </div>
+              <div class="field">
+                <label>Website</label>
+                <input type="text" name="website" placeholder="">
+              </div>
+              <div class="field">
+                <label>Description</label>
+                <textarea name="description" placeholder="" style="height: 100px"></textarea>
+              </div>
+              <div class="field">
+                <label for="add_file" class="ui icon button">
+                  <i class="file icon"></i>
+                  Upload Photo</label>
+                <input type="file" id="add_file" name="logo" style="display:none">
+              </div>
+              <button class="ui button blue" type="submit">Submit</button>
+            </form>
+          </p>
+        </div>
+        <div class="title"><i class="dropdown icon"></i> Or add rule? </div>
+        <div class="content">
+          <p>
+            <form class="ui form" method="post" action="/am/rules/rule/add">
+              {% csrf_token %}
+              <div class="field">
+                <label>Vendor</label>
+                <select class="ui fluid search dropdown" style="height: 35px;" name="vendor_id">
+                  {% for vendor in vendors %}
+                  <option value="{{ vendor.id }}">{{ vendor.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="field">
+                <label>Rule Name</label>
+                <input type="text" name="name" placeholder="">
+              </div>
+              <div class="field">
+                <label>Source Url</label>
+                <input type="text" name="source_url" placeholder="">
+              </div>
+              <div class="field">
+                <label>Regular Expression</label>
+                <input type="text" name="regex" placeholder="">
+              </div>
+              <button class="ui button blue" type="submit">Submit</button>
+              <a class="ui button teal" onclick="check_download_url(this.parentNode);">Test Rule</a>
+            </form>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  $(function(){
+    $('#add-rule').click(function(){
+      $('#add').modal('show');
+    });
+    $('.ui.accordion').accordion();
+    $('.ui.search')
+	.search({
+	    apiSettings:{url:'/am/rules/search?q={query}'},
+	})
+  })
+
+  function rule_del(rule_id) {
+    $.get('/am/rules/rule/del/' + rule_id,
+          function(result) {
+            window.location.href='/am/rules/';
+          });
+  };
+
+  function check_download_url(form) {
+    var form = form;
+    var data = $(form).serialize();
+    $.post(
+      '/am/rules/rule/check',
+      data,
+      function(data) {
+        alert(data);
+      }
+    );
+  }
+
+</script>
+{% endblock %}

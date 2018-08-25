@@ -1,0 +1,57 @@
+<script>
+$(function(){
+  $('#wam-menu').click(function(){
+    $('.ui.labeled.icon.sidebar')
+    .sidebar('setting', 'transition', 'scale down')
+    .sidebar('toggle');
+  })
+
+  $('.ui.dropdown')
+  .dropdown()
+  ;
+})
+</script>
+
+<div class="ui fixed menu" style="border:0px;background: #f1f1f1;left: 0;position: absolute;width: 100%;">
+  <div class="ui container">
+    <div class="wam-avatar" id="wam-menu" style="-moz-user-select:-moz-none;" onselectstart="return false;">W</div>
+    <div class="header item" style="font-weight: normal; font-size: 18px;">
+      Web App Monitor
+    </div>
+
+    <div class="ui dropdown right floated item" style="color:#989898; font-size:14px; border-right: 1px #DCDCDC solid;">
+      <i class="user icon" style="margin-top: 2px;"></i> {{ request.user }}
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        <a href="/logout/" class="item" data-value="male">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ui left demo vertical inverted sidebar labeled icon menu">
+  <a href="/" class="item">
+    <i class="home icon"></i>
+    Home
+  </a>
+  <a href="/am/" class="item">
+    <i class="bug icon"></i>
+    AM
+  </a>
+  <a href="/fm/" class="item">
+    <i class="Folder Open icon"></i>
+    FM
+  </a>
+  <a href="/idm/" class="item">
+    <i class="feed icon"></i>
+    IDM
+  </a>
+  <a href="/vdr/" class="item">
+    <i class="block layout icon"></i>
+    VDR
+  </a>
+  <a href="/settings/" class="item">
+    <i class="settings icon"></i>
+    Settings
+  </a>
+</div>

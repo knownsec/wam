@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% block title %}{{ diff.s_package.filename }} / {{ diff.d_package.filename }} detail{% endblock %}
+{% block wam-container %}
+{% include 'am/am_menu.html' %}
+<style>
+  .div      { border: solid 1px rgb(221, 221, 221); padding: 0px; margin-bottom: -30px;}
+  .minus3   { color: red;                          }
+  .plus3    { color: green;                        }
+  .at2      { color: blue;                         }
+  .plus     { color: black;   background: #79FF79; }
+  .minus    { color: black;   background: #FF9797; }
+  .ui.modal>.content>.icon+.description, .ui.modal>.content>.image+.description {
+    padding-left: 4em;
+  }
+
+  .ui.accordion .title:not(.ui) {
+    padding: 0;
+    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    font-size: 1em;
+    color: rgba(0,0,0,.87);
+    position: relative;
+    background: whitesmoke;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 10px 15px;
+    color: #555;
+    z-index: 10;
+    margin-top: -38px;
+    margin-bottom: -39px;
+  }
+
+  div.content.active {
+    margin-bottom: -30px;
+  }
+
+  .warningLine {
+      background: rgb(241, 61, 0);
+      color: #fff;
+      border-top: 1px rgba(0, 0, 0, 0.15) solid;
+      width: 75%;
+  }
+</style>
+<script>
+  // @author: evi1m0
+  $(function(){
+    $("div[name='diff_manage']").attr("id", "menu-item-hover");
+    $('.ui.accordion').accordion();
+    $('#send-mail').click(function(){
+      $('.small.modal').modal('show');
+    })
+    // add WarningCSS
+    var tagList = $('.diff-tags');
+    for(var i=0; i<tagList.length; i++){
+        // Search Tags title & lines
+        var tmpHtml = tagList[i].outerHTML;
+        var reTest  = tmpHtml.split('="#')[1].split('">');
+        var reTitle = reTest[0];
+        var reLine  = reTest[1].split(']</p>')[0].split('[')[1];
+        // Search DIV & CodeLines
+        var tmpContent = $('.content.active[name="' + reTitle + '"]')[0];
+        var innerHTML = tmpContent.innerHTML.split('\n');
+        innerHTML[Number(reLine)] = innerHTML[Number(reLine)].replace('<span class="', '<span class="warningLine ');
+        tmpContent.innerHTML = innerHTML.join('\n');
+    }
+  })
+</script>
+<div class="class-body">
+
+  <div class="ui cards">
+    <div class="card" style="width:72%;height:100px;">
+      <div class="content">
+        <div class="header">{{ diff.s_package.filename | add:"("| add:diff.s_package.timestamp | add:") / " | add:diff.d_package.filename | add:"(" | add:diff.d_package.timestamp | add:")" | truncatechars:85 }}</div>
+        <div class="description" style="font-size: 14px;">
+          <ul>
+            <li>Timeline: {{ diff.s_package.add_time | date:"Y-m-d H:i:s" }} - {{ diff.d_package.add_time | date:"Y-m-d H:i:s"}}</li>
+            <li>Tags:
+            {% if analysis_result.has_report %}
+                {% for plugin, num in analysis_result.plugins.items %}
+                  {% if num != 0 %}
+                      <a class="ui {% if plugin == "sqli" %}red
+                      {% elif plugin == "xss" %}orange
+                      {% elif plugin == "backdoor" %}yellow
+                      {% else %}blue
+                      {% endif %}tiny label" onclick="$('#{{ plugin }}').modal('show');" style="margin-right: -2px;">{{ plugin }}</a>
+                  {% endif %}
+                {% endfor %}
+            {% endif %}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="height:100px;">
+      <div class="content">
+        <div class="header">Email notification</div>
+        <div class="description">Send results to subscribers. (Diff result)</div>
+      </div>
+        <div class="ui bottom black attached button" id="send-mail"><i class="Mail Outline icon"></i> Send Mail</div>
+    </div>
+  </div>
+
+  {% if analysis_result.has_report %}
+      {% for tag_report in analysis_result.reports %}
+          <div class="ui basic modal" id="{{ tag_report.tag }}" style="background-color: rgb(255, 255, 255);border-radius: 5px">
+              <i class="close icon" style="color: rgba(0, 0, 0, 0.57);"></i>
+              <div class="header" style="color: #000000">{{ tag_report.tag }}</div>
+              <div class="content" style="color: #3a3a3a">
+                  {% for r in tag_report.result %}
+                  <div class="description diff-tags">
+                          <p>File: <a href="#{{ r.file }}">{{ r.file }}</a></p>
+                          <p>Line: {{ r.line }}</p>
+                          <p>Description: {{ r.desc }}</p>
+                          <hr style="border-top: 1px dashed rgba(158, 158, 158, 0.43);">
+                  </div>
+                  {% endfor %}
+              </div>
+          </div>
+      {% endfor %}
+  {% endif %}
+
+{% if not diff.render_content %}
+  <br><br>
+  <center><h3>未发现监控的特定文件出现变动，故不给予 DIFF 显示。</h3></center>
+{%endif%}
+<pre class="ui accordion">
+
+{{ diff.render_content | safe }}
+</pre>
+</div>
+
+<div class="ui small modal">
+  <div class="header">
+    Send Mail
+  </div>
+  <div class="image content">
+    <div class="ui medium image">
+      <img src="/static/images/20141007092745108.jpg">
+    </div>
+    <div class="description" style="margin-top: 11%;">
+      <div class="ui header" style="margin-left: -15px;">Enter an email address to be delivered.</div>
+      <div class="ui form">
+        <form action="/am/diff/mail/send" method="POST" name="send_mail">
+        <div class="field">
+          <label></label>
+          {% csrf_token %}
+          <input type="hidden" name="title" value="{{ diff.s_package.filename | add:"("| add:diff.s_package.timestamp | add:") / " | add:diff.d_package.filename | add:"(" | add:diff.d_package.timestamp | add:")" | truncatechars:85 }}">
+          <input type="hidden" name="eurl" value="http://{{ request.get_host }}{{ request.path }}">
+          <input type="email" name="email" placeholder="evi1m0.bat@gmail.com">
+        </div>
+      </div>
+      <br>
+      <p>Is it okay to use this email?</p>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="ui black deny button">
+      Nope
+    </div>
+    <button type="submit" class="ui positive right labeled icon button">
+      Yep, Ok
+      <i class="checkmark icon"></i>
+    </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

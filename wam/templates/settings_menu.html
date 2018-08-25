@@ -1,0 +1,9 @@
+<div class="class-menu">
+  <div class="menu-item" {% if request.path == '/settings/' %}id="menu-item-hover"{% endif %} ><a href="/settings/">Global</a></div>
+  <div class="menu-item" {% if request.path == '/settings/am/' %}id="menu-item-hover"{% endif %} ><a href="/settings/am/">AM</a></div>
+  <div class="menu-item" {% if request.path == '/settings/fm/' %}id="menu-item-hover"{% endif %} ><a href="/settings/fm/">FM</a></div>
+  <div class="menu-item" {% if request.path == '/settings/idm/' %}id="menu-item-hover"{% endif %} ><a href="/settings/idm/">IDM</a></div>
+  <div class="menu-item" {% if request.path == '/settings/diff/' %}id="menu-item-hover"{% endif %} ><a href="#">VDR</a></div>
+</div>
+
+<div class="ui section divider" style="width: 130%; margin-left: -180px;"></div>

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Information Dynamic Monitoring{% endblock %}
+{% block wam-container %}
+<div class="class-body">
+  <table class="ui blue celled table" style="margin-bottom: 30px;">
+    <thead>
+      <tr>
+        <th width="1%"></th>
+        <th width="30%">Vendor</th>
+        <th>WebSite</th>
+        <th>Rules</th>
+        <th>Diffs</th>
+        <th>Packs</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for vendor, rules_count, diffs_count, packs_count in vendors_report %}
+        <tr>
+          <td><img src="{{ LOGO_PATH }}{{ vendor.logo.name | default:"logo.png" }}" class="ui mini rounded image"></td>
+          <td><a href="/vdr/vendor/{{ vendor.id}}">{{ vendor.name }}</a></td>
+          <td><a href="{{ vendor.site }}" rel="noreferrer">{{ vendor.site }}</td>
+          <td>{{ rules_count }}</td>
+          <td>{{ diffs_count }}</td>
+          <td>{{ packs_count }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+</div>
+{% endblock %}

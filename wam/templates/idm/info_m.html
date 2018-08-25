@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block title %}Info - IDM Monitoring{% endblock %}
+{% block wam-container %}
+{% include 'idm/idm_menu.html' %}
+<style>
+  .ui.grid > .row > [class*="six wide"].column,
+  .ui.grid > .column.row > [class*="six wide"].column,
+  .ui.grid > [class*="six wide"].column,
+  .ui.column.grid > [class*="six wide"].column {
+    width: 21% !important;
+  }
+
+  .ui.grid > .row > [class*="ten wide"].column,
+  .ui.grid > .column.row > [class*="ten wide"].column,
+  .ui.grid > [class*="ten wide"].column,
+  .ui.column.grid > [class*="ten wide"].column {
+    width: 75.5% !important;
+    margin-top: -10px;
+  }
+
+  .ui.divided {
+    max-width: 1850px;
+    margin-left: -10px;
+    border: 1px #e1e8ed solid;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .ui.divided.items>.item {
+    padding: 10px;
+  }
+
+  .ui.items>.item>.image+.content {
+    margin-top: 5px;
+  }
+
+  .ui.items>.item .extra {
+    top: 5px;
+  }
+
+  .ui.items>.item>.content>.description{
+    height: 50px;
+  }
+</style>
+<div class="class-body">
+  <div class="ui grid">
+  <div class="two column computer only row">
+    <div class="ten wide column left-content">
+
+        <div class="ui divided items">
+          <div class="item">
+            <div class="image">
+              <img src="http://wiki.libvirt.org/wiki/images/4/4c/Virtual_network_switch_with_dnsmasq.jpg">
+            </div>
+            <div class="content">
+              <a class="header">我是如何对dnsmasq使用afl-fuzz差点拯救互联网的</a>
+              <div class="meta">
+                <span class="cinema">2015/11/12 @ http://www.freebuf.com/</span>
+              </div>
+              <div class="description">
+                <p>
+                  如果你认识我，那么你应该知道我喜欢DNS。虽然我不能完全确定这到底是怎么发生的，但我怀疑Ed Skoudis是始作俑者之一。
+
+                  无论如何，如果一个项目可以进行评估dnsmasq和一些互联网基础设施中的关键部分，那么这个项....
+                </p>
+              </div>
+              <div class="extra">
+                <div class="ui right floated teal button">Read the article<i class="right chevron icon"></i> </div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="image">
+              <img src="http://ww3.sinaimg.cn/large/c334041bgw1ey2v5whaesj2064046a9v.jpg">
+            </div>
+            <div class="content">
+              <a class="header">HTTPie：WEB开发调试工具</a>
+              <div class="meta">
+                <span class="cinema">IFC Cinema</span>
+              </div>
+              <div class="description">
+                <p>
+                  HTTPie (读作aych-tee-tee-pie)是命令行形式的HTTP客户端。可通过简单的http命令，可配合语法发送任意HTTP请求数据，并在终端以代码高亮的形式输出。HTTPie可用来对HTTP服务器进行测试、调试工作....
+                </p>
+              </div>
+              <div class="extra">
+                <div class="ui right floated teal button">Read the article<i class="right chevron icon"></i> </div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="image">
+              <img src="http://ww1.sinaimg.cn/large/c334041bgw1ey2v6wq560j2064046jrf.jpg">
+            </div>
+            <div class="content">
+              <a class="header">利用QQ邮箱漏洞进行钓鱼事件溯源</a>
+              <div class="meta">
+                <span class="cinema">2015-02-11 @ http://www.freebuf.com/</span>
+              </div>
+              <div class="description">
+                <p>
+                  本次出问题的模块为QQ邮箱的邮件订阅预览功能，该功能允许加载一个远程可控的XML文件，但是在解析远程xml文档，生成邮件预览页时，没有严格校验输入数据，从而导致跨站的发生。....
+                </p>
+              </div>
+              <div class="extra">
+                <div class="ui right floated teal button">Read the article<i class="right chevron icon"></i> </div>
+              </div>
+            </div>
+          </div>
+          <div class="item" style="padding-left: 45%;">
+            <div class="ui centered inline" id="load-more">
+              <div class="ui centered inline loader" id="load-more-core"></div>
+              <center>Load more...</center>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+    <div class="six wide column right-content">
+      <div class="">
+        <h4 style="color:#66757f; margin-bottom: 20px;"><i class="icon arrow Up"></i> Top 10 · Today</h4>
+      </div>
+      <div class="">
+        <ul class="trend-items js-trends">
+          <li class="trend-item js-trend-item  " data-trend-name="#HTGAWM">
+            <a class="js-nav trend-name" dir="ltr" href="/hashtag/HTGAWM?src=tren" data-query-source="trend_click">巴黎袭击前夜 匿名者组织反ISIS账号被封</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#Scandal">
+            <a class="js-nav trend-name" dir="ltr" href="/hashtag/Scandal?src=tren" data-query-source="trend_click">中国的约会克隆App不安全也无隐私</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#CVE-2015-2222">
+            <a class="js-nav trend-name" dir="ltr" href="/search?q=%22iPad%20Pro%22&amp;src=tren" data-query-source="trend_click">Android SO逆向2-实例分析</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#purpose">
+            <a class="js-nav trend-name" dir="ltr" href="/hashtag/purpose?src=tren" data-query-source="trend_click">SSL中间人攻击防范方案概述</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#MadeInTheAM">
+            <a class="js-nav trend-name" dir="ltr" href="/hashtag/MadeInTheAM?src=tren" data-query-source="trend_click">翻墙路由器的原理与实现</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#TheTechAwards">
+            <a class="js-nav trend-name" dir="ltr" href="/hashtag/TheTechAwards?src=tren" data-query-source="trend_click">Local Administrator Password Solution</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#Steph Curry">
+            <a class="js-nav trend-name" dir="ltr" href="/search?q=%22Steph%20Curry%22&amp;src=tren" data-query-source="trend_click">智能设备Wi-Fi快速配置类协议安全</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#iPad Pro">
+            <a class="js-nav trend-name" dir="ltr" href="/search?q=%22iPad%20Pro%22&amp;src=tren" data-query-source="trend_click">#CVE-2015-2221</a>
+          </li>
+          <li class="trend-item js-trend-item  " data-trend-name="#North Korea">
+            <a class="js-nav trend-name" dir="ltr" href="/search?q=%22North%20Korea%22&amp;src=tren" data-query-source="trend_click">#North Korea</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  </div>
+</div>
+
+<script>
+  $('#load-more').click(function(){
+    $('#load-more-core').addClass('active');
+  })
+</script>
+{% endblock %}

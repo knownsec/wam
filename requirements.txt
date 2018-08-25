@@ -1,0 +1,5 @@
+django==1.7.11
+requests
+chardet
+patool
+python-ldap

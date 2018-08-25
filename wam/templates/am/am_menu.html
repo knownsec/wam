@@ -1,0 +1,8 @@
+<div class="class-menu">
+  <div class="menu-item" {% if request.path == '/am/' %}id="menu-item-hover"{% endif %} ><a href="/am/">AM Index</a></div>
+  <div name="diff_manage" class="menu-item" {% if request.path == '/am/diff/' %}id="menu-item-hover"{% endif %} ><a href="/am/diff/">Diff Manage</a></div>
+  <div name="rules_manage" class="menu-item" {% if request.path == '/am/rules/' %}id="menu-item-hover"{% endif %} ><a href="/am/rules/">Rules</a></div>
+  <div name="vendor_manage" class="menu-item" {% if request.path == '/am/vendor/' %}id="menu-item-hover"{% endif %} ><a href="/am/vendor/">Vendors</a></div>
+</div>
+
+<div class="ui section divider" style="width: 130%; margin-left: -180px;"></div>

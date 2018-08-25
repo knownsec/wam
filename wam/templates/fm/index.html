@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}File Monitoring{% endblock %}
+{% block wam-container %}
+{% include 'fm/fm_menu.html' %}
+<div class="class-body">
+
+  <div class="am_timeline">
+    <div class="ui feed">
+
+      {% for fdiff in fdiffs %}
+      <div class="event">
+        <div class="label">
+          <a href="#"><img src="/static/images/{{ avatar_list | random }}"></a>
+        </div>
+        <div class="content">
+          <div class="date">
+            {{ fdiff.add_time | date:"Y-m-d H:i:s" }}
+          </div>
+          <div class="summary">
+            检测到 <a href="#">{% if fdiff.s_file.frule.desc %}{{ fdiff.s_file.frule.desc }}{% else %}{{ fdiff.s_file.frule.name }}{% endif %}</a> 有内容变更。
+            <a class="diff-item-id" href="/fm/diff/detail/{{ fdiff.id }}">Diff: {{ fdiff.id }}</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="event">
+        <div class="label">
+          <a href="#"><img src="/static/images/{{ avatar_list | random }}"></a>
+        </div>
+        <div class="content">
+          2015-10-21 11:24:01
+          <div class="summary">
+            检测到 Discuz主站JQuery <a href="#">jquery-1.7.2.min.js</a> 有内容变更
+            <a class="diff-item-id" href="#">Diff: 12</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

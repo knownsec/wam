@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+{% block title %}Rules setting{% endblock %}
+{% block wam-container %}
+{% include 'fm/fm_menu.html' %}
+<style>
+  .ui.compact.table td {
+    padding: .7em .7em;
+  }
+</style>
+
+<div class="class-body">
+  <table class="ui yellow compact celled table">
+    <thead class="full-width">
+      <tr>
+        <th width="7%">
+          <div class="ui buttons">
+            <button class="ui green button" id="add-rule">Add re</button>
+          </div>
+        </th>
+        <th width="15%">RuleName</th>
+        <th width="22%">Descript</th>
+        <th width="22%">Source</th>
+        <th width="10%">Start/time</th>
+        <th width="10%">Last/time</th>
+        <th>Manage</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for frule in frules %}
+      <tr>
+        <td class="collapsing">
+          <a href="#" onclick="$('#frule_del_{{ frule.id }}').modal('show');" class="ui button red">Delete</a>
+        </td>
+        <td><a href="#" onclick="$('#frule_edit_{{ frule.id }}').modal('show');">{{ frule.name }}</a></td>
+        <td>{{ frule.desc | truncatechars:60 }}</td>
+        <td>{{ frule.source_url | truncatechars:40 }}</td>
+        <td>{{ frule.add_time | date:"Y-m-d H:i:s" }}</td>
+        <td>{{ frule.last_check_date | date:"Y-m-d H:i:s" | default:"(N/Y)" }}</td>
+        <td class="collapsing">
+          <a href="/fm/rules/{{ frule.id }}" class="ui button blue">Go to</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="7">
+          <div class="ui right floated pagination menu">
+            {% if page_content %}
+              {% if page_content.page.has_previous %}
+                <a href="/fm/rules/?page={{ page_content.page.previous_page_number }}" class="icon item">
+                  <i class="left chevron icon"></i>
+                </a>
+              {% endif %}
+
+              {% for pnum in page_content.begin %}
+                <a href="/fm/rules/?page={{ pnum }}" class="item {% ifequal pnum page_content.current %}active{% endifequal %}">{{ pnum }}</a>
+              {% endfor %}
+
+              {% if page_content.middle %}
+                <a class="item">...</a>
+                {% for pnum in page_content.middle %}
+                  <a href="/fm/rules/?page={{ pnum }}" class="item {% ifequal pnum page_content.current %}active{% endifequal %}">{{ pnum }}</a>
+                {% endfor %}
+              {% endif %}
+
+              {% if page_content.end %}
+                <a class="item">...</a>
+                {% for pnum in page_content.end %}
+                  <a href="/fm/rules/?page={{ pnum }}" class="item {% ifequal pnum page_content.current %}active{% endifequal %}">{{ pnum }}</a>
+                {% endfor %}
+              {% endif %}
+
+              {% if page_content.page.has_next %}
+                <a href="/fm/rules/?page={{ page_content.page.next_page_number }}" class="icon item">
+                  <i class="right chevron icon"></i>
+                </a>
+              {% endif %}
+            {% endif %}
+          </div>
+        </th>
+      </tr> </tfoot>
+  </table>
+  {% for frule in frules %}
+  <div class="ui basic modal" id="frule_del_{{ frule.id }}" style="background-color: rgba(0, 0, 0, 0.34);">
+    <i class="close icon"></i>
+    <div class="header">
+      Delete Confirm
+    </div>
+    <div class="content">
+      <div class="description">
+        <h4>You want to delete rule: "{{ frule.name }}" ?</h4>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="two fluid ui inverted buttons">
+        <div class="ui red basic inverted button" onclick="$('.ui.basic.modal').modal('hide');">
+          <i class="remove icon"></i>
+          No
+        </div>
+        <div class="ui green basic inverted button" onclick="rule_del({{ frule.id }});">
+          <i class="checkmark icon"></i>
+          Yes
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% for frule in frules %}
+  <div class="ui small modal" id="frule_edit_{{ frule.id }}" style="background-color: rgba(0, 0, 0, 0.34);">
+    <div class="image content">
+      <div class="description">
+        <div class="content">
+          <p>
+            <form class="ui form" method="post" action="/fm/rules/rule/edit/{{ frule.id }}">
+              {% csrf_token %}
+              <div class="field">
+                <label>Rule Name</label>
+                <input type="text" name="name" placeholder="" value="{{ frule.name }}">
+              </div>
+              <div class="field">
+                <label>Source Url</label>
+                <input type="text" name="source_url" placeholder="" value="{{ frule.source_url }}">
+              </div>
+              <div class="field" hidden>
+                <label>Regex</label>
+                <input type="text" name="regex" placeholder="" value="{{ frule.regex }}">
+              </div>
+              <div class="field">
+                <label>Regex Content</label>
+                <input type="text" name="regex_content" placeholder="" value="{{ frule.regex_content }}">
+              </div>
+              <div class="field">
+                <label>Vendor</label>
+                <div class="ui search">
+                  <div class="ui icon input">
+                    <select class="ui fluid search dropdown" name="vendor_id">
+                    {% for vendor in vendor_list %}
+                    <option value="{{ vendor.id }}" {% ifequal frule.vendor_id vendor.id %}selected{% endifequal %}>{{ vendor.name }}</option>
+                    {% endfor %}
+                    </select>
+                  </div>
+                  <div class="results"></div>
+                </div>
+              </div>
+              <div class="field">
+                <label>Description</label>
+                <textarea name="description" placeholder="" style="height: 100px">{{ frule.desc }}</textarea>
+              </div>
+              <button class="ui button blue" type="submit">Update</button>
+              <a class="ui button teal" onclick="check_file_filter_content(this.parentNode);">Test Filter Content</a>
+            </form>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="ui small modal" id="add">
+  <div class="image content">
+    <div class="description">
+      <div class="ui accordion">
+        <div class="title"><i class="dropdown icon"></i> Add a rule? </div>
+        <div class="active content">
+          <p class="transition hidden">
+            <form class="ui form" method="post" action="/fm/rules/rule/add" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="field">
+                <label>Rule Name</label>
+                <input type="text" name="name" placeholder="">
+              </div>
+              <div class="field">
+                <label>Source Url</label>
+                <input type="text" name="source_url" placeholder="">
+              </div>
+              <div class="field" hidden>
+                <label>Regex</label>
+                <input type="text" name="regex" placeholder="">
+              </div>
+              <div class="field">
+                <label>Regex Content</label>
+                <input type="text" name="regex_content" placeholder="">
+              </div>
+              <div class="field">
+                <label>Vendor</label>
+                <div class="ui search">
+                  <div class="ui icon input">
+                    <select class="ui fluid search dropdown" name="vendor_id">
+                    {% for vendor in vendor_list %}
+                    <option value="{{ vendor.id }}">{{ vendor.name }}</option>
+                    {% endfor %}
+                    </select>
+                  </div>
+                  <div class="results"></div>
+                </div>
+              </div>
+              <div class="field">
+                <label>Description</label>
+                <textarea name="description" placeholder="" style="height: 100px"></textarea>
+              </div>
+              <button class="ui button blue" type="submit">Submit</button>
+              <a class="ui button teal" onclick="check_file_filter_content(this.parentNode);">Test Filter Content</a>
+            </form>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  $(function(){
+    $('#add-rule').click(function(){
+      $('#add').modal('show');
+    });
+    $('.ui.accordion').accordion();
+  })
+
+  function rule_del(rule_id) {
+    $.get('/fm/rules/rule/del/' + rule_id,
+          function(result) {
+            location.reload();
+          });
+  };
+
+  function check_file_filter_content(form) {
+    var form = form;
+    var data = $(form).serialize();
+    $.post(
+      '/fm/rules/rule/check',
+      data,
+      function(data) {
+        alert(data);
+      }
+    );
+  }
+</script>
+{% endblock %}

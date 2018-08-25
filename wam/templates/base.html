@@ -1,0 +1,57 @@
+<!DOCTYPE html5>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %} - WAM</title>
+    <link rel="stylesheet" type="text/css" href="/static/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/reset.css">
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/site.css">
+
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/container.css">
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/grid.css">
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/header.css">
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/image.css">
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/menu.css">
+
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/divider.css">
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/segment.css">
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/form.css">
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/input.css">
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/button.css">
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/list.css">
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/message.css">
+    <link rel="stylesheet" type="text/css" href="/static/dist/components/icon.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/messenger.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/messenger-theme-ice.css">
+    <link rel="stylesheet" type="text/css" href="/static/wam.css">
+    {% block wam-css %}
+    {% endblock %}
+
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/dist/semantic.min.js"></script>
+    <script src="/static/js/messenger.min.js"></script>
+    <script src="/static/wam.js"></script>
+    <script>
+      $._messengerDefaults = {
+        extraClasses: 'messenger-fixed messenger-theme-ice messenger-on-bottom messenger-on-right'
+      }
+    </script>
+    {% block wam-js %}
+    {% endblock %}
+  </head>
+
+  <body>
+    <div class="wam-body" id="wam-wrap">
+      {% include 'headers.html' %}
+      <div class="wam-container">
+      {% block wam-container %}
+      {% endblock %}
+      <div class="zh-backtotop return-top" style="opacity: 1;">
+        <a data-action="backtotop" href="javascript:;" class="btn-backtotop btn-action">
+          <div class="arrow"></div>
+          <div class="stick"></div>
+        </a>
+      </div>
+      </div>
+    </div>
+  </body>
+</html>
