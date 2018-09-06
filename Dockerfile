@@ -153,7 +153,9 @@ COPY ./ /data/projects/wam/
 COPY ./conf /data/envs/wam/conf
 
 RUN pip install -r //data/projects/wam/requirements.txt \
-		&& mkdir /data/projects/wam/monitor/logs
+		&& mkdir /data/projects/wam/monitor/logs \
+		&& python /data/projects/wam/manage.py migrate 
+
 WORKDIR /data/projects/wam
 
 CMD ["/usr/bin/supervisord"]
