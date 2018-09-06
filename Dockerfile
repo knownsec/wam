@@ -142,7 +142,7 @@ ENV NGINX_WORKER_PROCESSES 1
 ENV LISTEN_PORT 8080
 
 # Copy the entrypoint that will generate Nginx additional configs
-COPY entrypoint.sh /entrypoint.sh
+COPY conf/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
