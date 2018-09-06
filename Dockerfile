@@ -9,7 +9,7 @@ ENV NGINX_VERSION 1.13.12-1~stretch
 ENV NJS_VERSION   1.13.12.0.2.0-1~stretch
 
 RUN set -x \
-	&& sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+	&& sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list \
 	&& apt-get update \
 	&& apt-get install --no-install-recommends --no-install-suggests -y gnupg1 apt-transport-https ca-certificates \
 	&& \
