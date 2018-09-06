@@ -152,7 +152,8 @@ ENTRYPOINT ["/entrypoint.sh"]
 COPY ./ /data/projects/wam/
 COPY ./conf /data/envs/wam/conf
 
-RUN pip install -r //data/projects/wam/requirements.txt
+RUN pip install -r //data/projects/wam/requirements.txt \
+		&& mkdir /data/projects/wam/monitor 
 WORKDIR /data/projects/wam
 
 CMD ["/usr/bin/supervisord"]
