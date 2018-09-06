@@ -163,6 +163,9 @@ RUN pip install -r /data/projects/wam/requirements.txt \
 		&& mkdir /data/projects/wam/monitor/logs \
 		&& python /data/projects/wam/manage.py migrate 
 
+
+WORKDIR /data/projects/wam
+
 RUN python -c "import django; django.setup(); \
    from django.contrib.auth.management.commands.createsuperuser import get_user_model; \
    get_user_model()._default_manager.db_manager('$DJANGO_DB_NAME').create_superuser( \
@@ -170,6 +173,6 @@ RUN python -c "import django; django.setup(); \
    email='$DJANGO_SU_EMAIL', \
    password='$DJANGO_SU_PASSWORD')"
 
-WORKDIR /data/projects/wam
+
 
 CMD ["/usr/bin/supervisord"]
