@@ -160,7 +160,7 @@ RUN pip install -r /data/projects/wam/requirements.txt \
 		&& mkdir /data/projects/wam/monitor/logs \
 		&& python /data/projects/wam/manage.py migrate \
 		&& echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser\
-		('admin', 'admin@wam.com', 'password')" | python manage.py shell
+		('admin', 'admin@wam.com', 'password')" | python /data/projects/wam/manage.py shell
 
 
 
