@@ -144,6 +144,7 @@ ENV LISTEN_PORT 8080
 # Copy the entrypoint that will generate Nginx additional configs
 COPY conf/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh && mkdir /var/log/wam
+RUN pip install -r //data/projects/wam/requirements.txt
 
 ENTRYPOINT ["/entrypoint.sh"]
 
