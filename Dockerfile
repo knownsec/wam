@@ -149,7 +149,7 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 # Add demo app
 COPY ./ /data/projects/wam/
-COPY ./conf /data/envs/wam/
+COPY ./conf /data/envs/wam/conf
 WORKDIR /data/projects/wam
 
 CMD ["/usr/bin/supervisord"]
