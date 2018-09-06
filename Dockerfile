@@ -154,6 +154,7 @@ COPY ./conf /data/envs/wam/conf
 
 
 
+WORKDIR /data/projects/wam
 
 RUN pip install -r /data/projects/wam/requirements.txt \
 		&& mkdir /data/projects/wam/monitor/logs \
@@ -161,7 +162,6 @@ RUN pip install -r /data/projects/wam/requirements.txt \
 		&& echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser\
 		('admin', 'admin@wam.com', 'password')" | python manage.py shell
 
-WORKDIR /data/projects/wam
 
 
 
