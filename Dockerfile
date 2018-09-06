@@ -9,7 +9,7 @@ ENV NGINX_VERSION 1.13.12-1~stretch
 ENV NJS_VERSION   1.13.12.0.2.0-1~stretch
 
 RUN set -x \
-	&& sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list \
+	&& sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
 	&& apt-get update \
 	&& apt-get install --no-install-recommends --no-install-suggests -y gnupg1 apt-transport-https ca-certificates \
 	&& \
@@ -119,7 +119,7 @@ RUN apt-get update && apt-get install -y supervisor \
 COPY conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Which uWSGI .ini file should be used, to make it customizable
-ENV UWSGI_INI /app/uwsgi.ini
+ENV UWSGI_INI /data/envs/wam/conf/uwsgi.ini
 
 # By default, run 2 processes
 ENV UWSGI_CHEAPER 2
@@ -142,13 +142,14 @@ ENV NGINX_WORKER_PROCESSES 1
 ENV LISTEN_PORT 8080
 
 # Copy the entrypoint that will generate Nginx additional configs
-COPY conf/entrypoint.sh /entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Add demo app
-COPY ./ /app
-WORKDIR /app
+COPY ./ /data/projects/wam/
+COPY ./conf /data/envs/wam/
+WORKDIR /data/projects/wam
 
 CMD ["/usr/bin/supervisord"]
