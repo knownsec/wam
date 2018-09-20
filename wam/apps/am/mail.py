@@ -14,7 +14,7 @@ SmtpDict = {
 
 UserConfig = {
     'google': ('user','passwd'),
-    '163': ('ks_wam@163.com','laaysbfwxtcplnik'),
+    '163': ('user','passwd'),
     'qq': ('user','passwd'),
     'anquan': ('user','passwd')
     }
@@ -79,8 +79,8 @@ class MAIL:
         return False
 
 if __name__ == '__main__':
-    mailList = ('liuys@knownsec.com')
+    mailList = ('root@163.com')
     m = MAIL()
     ret = m.send(subject=u'[测试邮件] test_has_reply', body='this is a test emailx', to=mailList, fromName="WAM",
-            replyTo='ks_wam@163.com', replyName='wam', cc='', bcc='')
+            replyTo='root@163.com', replyName='wam', cc='', bcc='')
     print 'End!', ret
